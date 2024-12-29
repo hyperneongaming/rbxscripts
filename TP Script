@@ -1,0 +1,112 @@
+-- Teleport Script by HypeRat
+
+local player = game.Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+-- Create the GUI (Player GUI)
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "TestGui"
+screenGui.Parent = playerGui
+
+-- Create the main frame
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 300, 0, 400)
+frame.Position = UDim2.new(0.5, -150, 0.5, -200)
+frame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+frame.Parent = screenGui
+frame.Active = true
+
+-- Create the drag bar
+local dragBar = Instance.new("Frame")
+dragBar.Size = UDim2.new(1, 0, 0, 30)
+dragBar.Position = UDim2.new(0, 0, 0, 0)
+dragBar.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+dragBar.Parent = frame
+dragBar.Active = true
+
+-- Drag functionality for the frame
+local dragging = false
+local dragInput, dragStart, startPos
+
+dragBar.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        dragStart = input.Position
+        startPos = frame.Position
+
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+dragBar.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement then
+        dragInput = input
+    end
+end)
+
+game:GetService("UserInputService").InputChanged:Connect(function(input)
+    if input == dragInput and dragging then
+        local delta = input.Position - dragStart
+        frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end)
+
+-- Create the close button (X)
+local closeButton = Instance.new("TextButton")
+closeButton.Size = UDim2.new(0, 50, 0, 30)
+closeButton.Position = UDim2.new(1, -50, 0, 0)
+closeButton.Text = "X"
+closeButton.BackgroundColor3 = Color3.fromRGB(255, 100, 100)
+closeButton.Parent = dragBar
+
+-- Close the GUI when clicked
+closeButton.MouseButton1Click:Connect(function()
+    screenGui:Destroy()
+end)
+
+-- Create a list for players in the server
+local playerListFrame = Instance.new("ScrollingFrame")
+playerListFrame.Size = UDim2.new(1, -20, 0, 350)
+playerListFrame.Position = UDim2.new(0, 10, 0, 40)
+playerListFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+playerListFrame.ScrollBarThickness = 10
+playerListFrame.Parent = frame
+
+-- Add players to the player list
+local function updatePlayerList()
+    -- Clear existing player buttons
+    for _, child in pairs(playerListFrame:GetChildren()) do
+        if child:IsA("TextButton") then
+            child:Destroy()
+        end
+    end
+
+    -- Create a button for each player
+    for _, p in pairs(game.Players:GetPlayers()) do
+        local playerButton = Instance.new("TextButton")
+        playerButton.Size = UDim2.new(1, -10, 0, 40)
+        playerButton.Position = UDim2.new(0, 5, 0, (#playerListFrame:GetChildren()) * 45)
+        playerButton.Text = p.Name .. " (" .. p.DisplayName .. ")" -- Show Username and DisplayName
+        playerButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+        playerButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+        playerButton.Parent = playerListFrame
+
+        -- Function to teleport to the player when clicked
+        playerButton.MouseButton1Click:Connect(function()
+            if p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
+                game.Players.LocalPlayer.Character:SetPrimaryPartCFrame(p.Character.HumanoidRootPart.CFrame)
+            end
+        end)
+    end
+end
+
+-- Update player list every time it changes
+game.Players.PlayerAdded:Connect(updatePlayerList)
+game.Players.PlayerRemoving:Connect(updatePlayerList)
+
+-- Initial player list update
+updatePlayerList()
