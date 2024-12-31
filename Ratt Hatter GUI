@@ -1,61 +1,28 @@
--- Ensure the script is running in the right context (Client)
-if not game:IsLoaded() then
-    game.Loaded:Wait()
-end
-
--- Create the ScreenGui for the player
 local player = game.Players.LocalPlayer
 local screenGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-screenGui.Name = "RattHatterV4Gui"
+screenGui.Name = "RattHatterV5Gui"
 screenGui.ResetOnSpawn = false
 
--- Create the main frame
+-- Main Frame
 local mainFrame = Instance.new("Frame", screenGui)
 mainFrame.Size = UDim2.new(0, 500, 0, 600)
 mainFrame.Position = UDim2.new(0.5, -250, 0.5, -300)
 mainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-mainFrame.BorderSizePixel = 0
+mainFrame.BorderColor3 = Color3.fromRGB(139, 0, 0) -- Dark Red Border
+mainFrame.BorderSizePixel = 3
 mainFrame.Active = true
 
--- Rounded corners
+-- Rounded Corners and Texture
 local corner = Instance.new("UICorner", mainFrame)
 corner.CornerRadius = UDim.new(0, 20)
 
--- Draggable functionality
-local UIS = game:GetService("UserInputService")
-local dragging, dragInput, dragStart, startPos
+local texture = Instance.new("ImageLabel", mainFrame)
+texture.Size = UDim2.new(1, 0, 1, 0)
+texture.BackgroundTransparency = 1
+texture.Image = "rbxassetid://2151741365" -- Subtle texture or pattern
+texture.ImageTransparency = 0.9
 
-local function updateDrag(input)
-    local delta = input.Position - dragStart
-    mainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-end
-
-mainFrame.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
-        dragging = true
-        dragStart = input.Position
-        startPos = mainFrame.Position
-        input.Changed:Connect(function()
-            if input.UserInputState == Enum.UserInputState.End then
-                dragging = false
-            end
-        end)
-    end
-end)
-
-mainFrame.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseMovement then
-        dragInput = input
-    end
-end)
-
-UIS.InputChanged:Connect(function(input)
-    if input == dragInput and dragging then
-        updateDrag(input)
-    end
-end)
-
--- Fade-in effect
+-- Fade-in Effect
 mainFrame.BackgroundTransparency = 1
 mainFrame.Visible = false
 
@@ -63,21 +30,22 @@ task.spawn(function()
     mainFrame.Visible = true
     for i = 1, 0, -0.05 do
         mainFrame.BackgroundTransparency = i
+        texture.ImageTransparency = 0.9 + (i * 0.1)
         task.wait(0.05)
     end
 end)
 
--- Create the title label
+-- Title Label
 local titleLabel = Instance.new("TextLabel", mainFrame)
 titleLabel.Size = UDim2.new(1, 0, 0, 50)
 titleLabel.Position = UDim2.new(0, 0, 0, 10)
 titleLabel.BackgroundTransparency = 1
 titleLabel.Text = "🐀 Ratt Hatter"
-titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleLabel.TextColor3 = Color3.fromRGB(255, 0, 0) -- Hacker Style Red
 titleLabel.TextScaled = true
-titleLabel.Font = Enum.Font.GothamBold
+titleLabel.Font = Enum.Font.Code -- Hacker-style code font
 
--- Create the close button
+-- Buttons for Close and Minimize
 local closeButton = Instance.new("TextButton", mainFrame)
 closeButton.Size = UDim2.new(0, 40, 0, 40)
 closeButton.Position = UDim2.new(1, -50, 0, 5)
@@ -86,18 +54,18 @@ closeButton.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
 closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 closeButton.Font = Enum.Font.GothamBold
 closeButton.TextScaled = true
-closeButton.BorderSizePixel = 0
+local closeCorner = Instance.new("UICorner", closeButton)
+closeCorner.CornerRadius = UDim.new(0, 10)
 
--- Rounded corners for buttons
-local buttonCorner = Instance.new("UICorner", closeButton)
-buttonCorner.CornerRadius = UDim.new(0, 10)
-
--- Close functionality
 closeButton.MouseButton1Click:Connect(function()
+    for i = 0, 1, 0.05 do
+        mainFrame.BackgroundTransparency = i
+        texture.ImageTransparency = 0.9 + (i * 0.1)
+        task.wait(0.05)
+    end
     screenGui:Destroy()
 end)
 
--- Create the minimize button
 local minimizeButton = Instance.new("TextButton", mainFrame)
 minimizeButton.Size = UDim2.new(0, 40, 0, 40)
 minimizeButton.Position = UDim2.new(1, -100, 0, 5)
@@ -106,29 +74,58 @@ minimizeButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 minimizeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 minimizeButton.Font = Enum.Font.GothamBold
 minimizeButton.TextScaled = true
-minimizeButton.BorderSizePixel = 0
+local minimizeCorner = Instance.new("UICorner", minimizeButton)
+minimizeCorner.CornerRadius = UDim.new(0, 10)
 
-local buttonMinimizeCorner = Instance.new("UICorner", minimizeButton)
-buttonMinimizeCorner.CornerRadius = UDim.new(0, 10)
-
--- Slide animation for minimize button
+-- Minimize/Expand Animation
 local minimized = false
 minimizeButton.MouseButton1Click:Connect(function()
     if not minimized then
         for i = mainFrame.Size.Y.Offset, 50, -10 do
             mainFrame.Size = UDim2.new(0, 500, 0, i)
+            titleLabel.TextTransparency = i / 600
+            texture.ImageTransparency = 0.9 + (i / 600)
             task.wait(0.02)
         end
         minimized = true
     else
         for i = 50, 600, 10 do
             mainFrame.Size = UDim2.new(0, 500, 0, i)
+            titleLabel.TextTransparency = (600 - i) / 600
+            texture.ImageTransparency = 0.9 + ((600 - i) / 600)
             task.wait(0.02)
         end
         minimized = false
     end
 end)
 
--- Scrolling Frame and Buttons (Refer to previous implementation for adding buttons)
+-- Buttons Section
+local scrollingFrame = Instance.new("ScrollingFrame", mainFrame)
+scrollingFrame.Size = UDim2.new(1, -20, 0, 500)
+scrollingFrame.Position = UDim2.new(0, 10, 0, 80)
+scrollingFrame.CanvasSize = UDim2.new(0, 0, 2, 0)
+scrollingFrame.BackgroundTransparency = 1
 
--- Add button generation code here...
+-- Add buttons dynamically
+local scripts = {
+    {"Chat Bypass #1", "loadstring(game:HttpGet('https://pastefy.app/CJ0E33tA/raw'))()"},
+    {"Chat Bypass #2", "loadstring(game:HttpGet('https://raw.githubusercontent.com/BakaPraselol/MRCBV4LSB4KRS/main/Loader'))()"},
+    -- Add the rest of your buttons here
+}
+
+for i, script in ipairs(scripts) do
+    local button = Instance.new("TextButton", scrollingFrame)
+    button.Size = UDim2.new(0.9, 0, 0, 50)
+    button.Position = UDim2.new(0.05, 0, 0, (i - 1) * 60)
+    button.Text = script[1]
+    button.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.Font = Enum.Font.Code
+    button.TextScaled = true
+    button.MouseButton1Click:Connect(function()
+        loadstring(script[2])()
+    end)
+
+    local btnCorner = Instance.new("UICorner", button)
+    btnCorner.CornerRadius = UDim.new(0, 10)
+end
