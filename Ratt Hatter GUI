@@ -29,6 +29,11 @@ texture.BackgroundTransparency = 1
 texture.Image = "rbxassetid://123456789"  -- Replace with your desired texture ID
 texture.ImageTransparency = 0.5
 
+-- Slight blur effect and transparency for the background
+local blur = Instance.new("BlurEffect", screenGui)
+blur.Size = 4
+screenGui.Parent = game:GetService("Lighting")  -- Apply blur to entire screen
+
 -- Add rounded corners to the main frame
 local mainFrameCorner = Instance.new("UICorner", mainFrame)
 mainFrameCorner.CornerRadius = UDim.new(0, 15)
@@ -62,8 +67,37 @@ closeButton.TextTransparency = 1  -- Start as invisible for fade-in effect
 local closeButtonCorner = Instance.new("UICorner", closeButton)
 closeButtonCorner.CornerRadius = UDim.new(0, 10)
 
+-- Create the minimize button
+local minimizeButton = Instance.new("TextButton", mainFrame)
+minimizeButton.Size = UDim2.new(0, 40, 0, 40)
+minimizeButton.Position = UDim2.new(1, -100, 0, 5)
+minimizeButton.Text = "-"
+minimizeButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+minimizeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+minimizeButton.Font = Enum.Font.GothamBold
+minimizeButton.TextScaled = true
+minimizeButton.BorderSizePixel = 0
+minimizeButton.TextTransparency = 1  -- Start as invisible for fade-in effect
+
+-- Add rounded corners to the minimize button
+local minimizeButtonCorner = Instance.new("UICorner", minimizeButton)
+minimizeButtonCorner.CornerRadius = UDim.new(0, 10)
+
+-- Minimize functionality
+local minimized = false
+minimizeButton.MouseButton1Click:Connect(function()
+    if not minimized then
+        game:GetService("TweenService"):Create(mainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(0, 0, 0, 50), Position = UDim2.new(1, -50, 0, 5)}):Play()
+        minimized = true
+    else
+        game:GetService("TweenService"):Create(mainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(0, 500, 0, 600), Position = UDim2.new(0.5, -250, 0.5, -300)}):Play()
+        minimized = false
+    end
+end)
+
 -- Close button functionality
 closeButton.MouseButton1Click:Connect(function()
+    game:GetService("TweenService"):Create(mainFrame, TweenInfo.new(1, Enum.EasingStyle.Linear, Enum.EasingDirection.Out), {TextTransparency = 1}):Play()
     screenGui:Destroy()
 end)
 
@@ -82,7 +116,7 @@ scrollFrameCorner.CornerRadius = UDim.new(0, 15)
 
 -- Layout for buttons
 local layout = Instance.new("UIGridLayout", scrollFrame)
-layout.CellSize = UDim2.new(0, 130, 0, 50)
+layout.CellSize = UDim2.new(0, 120, 0, 50)
 layout.CellPadding = UDim2.new(0, 5, 0, 5)
 
 -- Function to add buttons with rounded corners and smooth transitions
@@ -119,24 +153,16 @@ local function addButton(text, scriptUrl)
     game:GetService("TweenService"):Create(button, TweenInfo.new(0.5, Enum.EasingStyle.Linear, Enum.EasingDirection.Out), {TextTransparency = 0}):Play()
 end
 
--- Add buttons with respective scripts and add fade-in effects for the buttons one by one
-local buttons = {
-    {"Chat Bypass #1", "https://pastefy.app/CJ0E33tA/raw"},
-    {"Chat Bypass (OUTDATED) #2", "https://raw.githubusercontent.com/BakaPraselol/MRCBV4LSB4KRS/main/Loader"},
-    {"Chat Bypass (Artify) #3", "https://pastefy.app/r39aZhXJ/raw"},
-    {"Chat Bypass #4", "https://raw.githubusercontent.com/Synergy-Networks/products/main/BetterBypasser/loader.lua"},
-    {"Bang Inf Yield #1", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"},
-    {"Bang Inf Yield (Dolphin) #2", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"},
-    {"Inf Yield #3", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"},
-    {"MM2 GUI", "https://raw.githubusercontent.com/Doggo-cryto/EclipseMM2/master/Script"},
-    {"Faker IPs", "https://pastefy.app/nqncsXed/raw"}
-}
-
-for i, button in ipairs(buttons) do
-    wait(i * 0.3)  -- Delay to fade buttons in one by one
-    addButton(button[1], button[2])
-end
-
--- Fade in the title and close button
-game:GetService("TweenService"):Create(titleLabel, TweenInfo.new(1, Enum.EasingStyle.Linear, Enum.EasingDirection.Out), {TextTransparency = 0}):Play()
-game:GetService("TweenService"):Create(closeButton, TweenInfo.new(1, Enum.EasingStyle.Linear, Enum.EasingDirection.Out), {TextTransparency = 0}):Play()
+-- Add buttons with respective scripts
+addButton("Chat Bypass #1", "https://pastefy.app/CJ0E33tA/raw")
+addButton("Chat Bypass #2", "https://raw.githubusercontent.com/BakaPraselol/MRCBV4LSB4KRS/main/Loader")
+addButton("Chat Bypass (Artify)", "https://pastefy.app/r39aZhXJ/raw")
+addButton("Chat Bypass #4", "https://raw.githubusercontent.com/Synergy-Networks/products/main/BetterBypasser/loader.lua")
+addButton("Bang Inf Yield #1", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source")
+addButton("Bang Inf Yield (Dolphin)", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source")
+addButton("Inf Yield #3", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source")
+addButton("MM2 GUI", "https://raw.githubusercontent.com/Doggo-cryto/EclipseMM2/master/Script")
+addButton("Faker IPs", "https://raw.githubusercontent.com/BingusWR/FakeRobloxIPGrabber/refs/heads/main/FERobloxIpGrabberScrip")
+addButton("Jack Toothpaste (r6)", "https://pastefy.app/wa3v2Vgm/raw")
+addButton("FE Bangers", "https://gist.githubusercontent.com/benguss/282f472a00289fc4fb8ac95a5c0a6488/raw/23a402a19a7bdead6080dfe36498b68d0c3de779/Roblox%2520Bang%2520Script%2520(NSFW)")
+addButton("Teleport Script", "https://raw.githubusercontent.com/hyperneongaming/rbxscripts/refs/heads/main/TP%20Script")
