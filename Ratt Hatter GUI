@@ -2,14 +2,37 @@
 local player = game.Players.LocalPlayer
 local screenGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 screenGui.Name = "RattHatterV2Gui"
+screenGui.ResetOnSpawn = false  -- Keeps the GUI persistent after respawn
+
+-- Setup for logo fade-in effect
+local logo = Instance.new("ImageLabel", screenGui)
+logo.Size = UDim2.new(0, 200, 0, 200)
+logo.Position = UDim2.new(0.5, -100, 0.5, -100)
+logo.Image = "https://create.roblox.com/store/asset/103474832128400/Ratt-Hatt-Logo"
+logo.BackgroundTransparency = 1
+logo.ImageTransparency = 1
+logo.AnchorPoint = Vector2.new(0.5, 0.5)
+
+-- Fade-in and fade-out transition for the logo
+game:GetService("TweenService"):Create(logo, TweenInfo.new(1, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {ImageTransparency = 0}):Play()
+wait(2)  -- Wait for logo to stay visible
+game:GetService("TweenService"):Create(logo, TweenInfo.new(1, Enum.EasingStyle.Sine, Enum.EasingDirection.In), {ImageTransparency = 1}):Play()
+
+-- Wait until logo fades out before showing the rest of the GUI
+wait(2)
 
 -- Create the main frame
 local mainFrame = Instance.new("Frame", screenGui)
-mainFrame.Size = UDim2.new(0, 450, 0, 500)
-mainFrame.Position = UDim2.new(0.5, -225, 0.5, -250)
-mainFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+mainFrame.Size = UDim2.new(0, 500, 0, 600)
+mainFrame.Position = UDim2.new(0.5, -250, 0.5, -300)
+mainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 mainFrame.BorderSizePixel = 0
 mainFrame.Active, mainFrame.Draggable = true, true
+
+-- Gradient background for the main frame
+local frameGradient = Instance.new("UIGradient", mainFrame)
+frameGradient.Color = ColorSequence.new({ColorSequenceKeypoint.new(0, Color3.fromRGB(30, 30, 30)), ColorSequenceKeypoint.new(1, Color3.fromRGB(50, 0, 0))})
+frameGradient.Rotation = 45
 
 -- Add rounded corners to the main frame
 local mainFrameCorner = Instance.new("UICorner", mainFrame)
@@ -17,39 +40,54 @@ mainFrameCorner.CornerRadius = UDim.new(0, 15)
 
 -- Create the title label
 local titleLabel = Instance.new("TextLabel", mainFrame)
-titleLabel.Size = UDim2.new(1, 0, 0, 40)
+titleLabel.Size = UDim2.new(1, 0, 0, 50)
+titleLabel.Position = UDim2.new(0, 0, 0, 10)
 titleLabel.BackgroundTransparency = 1
-titleLabel.Text = "🐀 Ratt Hatter v2"
+titleLabel.Text = "🐀 Ratt Hatter"
 titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 titleLabel.TextScaled = true
 titleLabel.Font = Enum.Font.GothamBold
+titleLabel.TextStrokeTransparency = 0.5
+titleLabel.TextStrokeColor3 = Color3.fromRGB(200, 0, 0)
+titleLabel.TextTransparency = 0.2
+
+-- Glow effect for title text
+local titleGlow = Instance.new("TextGlow", titleLabel)
+titleGlow.Enabled = true
+titleGlow.Size = 10
+titleGlow.Color = Color3.fromRGB(255, 0, 0)
 
 -- Create the close button
 local closeButton = Instance.new("TextButton", mainFrame)
 closeButton.Size = UDim2.new(0, 40, 0, 40)
 closeButton.Position = UDim2.new(1, -50, 0, 5)
 closeButton.Text = "X"
-closeButton.BackgroundColor3 = Color3.fromRGB(255, 100, 100)
+closeButton.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
 closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 closeButton.Font = Enum.Font.GothamBold
 closeButton.TextScaled = true
 closeButton.BorderSizePixel = 0
+closeButton.TextTransparency = 0.5
 
 -- Add rounded corners to the close button
 local closeButtonCorner = Instance.new("UICorner", closeButton)
 closeButtonCorner.CornerRadius = UDim.new(0, 10)
 
--- Close button functionality
+-- Close button functionality with smooth fade-out transition
 closeButton.MouseButton1Click:Connect(function()
+    game:GetService("TweenService"):Create(mainFrame, TweenInfo.new(1, Enum.EasingStyle.Sine, Enum.EasingDirection.In), {BackgroundTransparency = 1}):Play()
+    wait(1)
     screenGui:Destroy()
 end)
 
 -- Create the scrolling frame for buttons
 local scrollFrame = Instance.new("ScrollingFrame", mainFrame)
-scrollFrame.Size = UDim2.new(1, -20, 0, 400)
-scrollFrame.Position = UDim2.new(0, 10, 0, 60)
+scrollFrame.Size = UDim2.new(1, -20, 0, 500)
+scrollFrame.Position = UDim2.new(0, 10, 0, 70)
 scrollFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 scrollFrame.ScrollBarThickness = 10
+scrollFrame.BorderSizePixel = 0
+scrollFrame.BackgroundTransparency = 0.5
 
 -- Add rounded corners to the scrolling frame
 local scrollFrameCorner = Instance.new("UICorner", scrollFrame)
@@ -60,21 +98,33 @@ local layout = Instance.new("UIGridLayout", scrollFrame)
 layout.CellSize = UDim2.new(0, 130, 0, 50)
 layout.CellPadding = UDim2.new(0, 5, 0, 5)
 
--- Function to add buttons with rounded corners
+-- Function to add buttons with rounded corners and smooth transitions
 local function addButton(text, scriptUrl)
     local button = Instance.new("TextButton", scrollFrame)
-    button.Size = UDim2.new(0, 100, 0, 50)
+    button.Size = UDim2.new(0, 120, 0, 50)
     button.Text = text
     button.TextColor3 = Color3.fromRGB(255, 255, 255)
-    button.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+    button.BackgroundColor3 = Color3.fromRGB(80, 0, 0)
     button.Font = Enum.Font.Gotham
     button.TextScaled = true
+    button.TextTransparency = 0.5
 
     -- Add rounded corners to the button
     local buttonCorner = Instance.new("UICorner", button)
     buttonCorner.CornerRadius = UDim.new(0, 10)
 
+    -- Button hover effects
+    button.MouseEnter:Connect(function()
+        game:GetService("TweenService"):Create(button, TweenInfo.new(0.2, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {BackgroundColor3 = Color3.fromRGB(200, 0, 0), TextTransparency = 0}):Play()
+    end)
+    button.MouseLeave:Connect(function()
+        game:GetService("TweenService"):Create(button, TweenInfo.new(0.2, Enum.EasingStyle.Sine, Enum.EasingDirection.In), {BackgroundColor3 = Color3.fromRGB(80, 0, 0), TextTransparency = 0.5}):Play()
+    end)
+
+    -- Button click functionality with script loading
     button.MouseButton1Click:Connect(function()
+        game:GetService("TweenService"):Create(button, TweenInfo.new(0.1, Enum.EasingStyle.Bounce, Enum.EasingDirection.Out), {TextTransparency = 1}):Play()
+        wait(0.2)
         loadstring(game:HttpGet(scriptUrl))()
     end)
 end
