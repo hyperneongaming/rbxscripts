@@ -126,10 +126,16 @@ local function addButton(text, scriptUrl)
     end)
 end
 
--- Add buttons with scripts
+-- Add the buttons with their respective URLs
 addButton("Chat Bypass #1", "https://pastefy.app/CJ0E33tA/raw")
-addButton("Chat Bypass #2", "https://raw.githubusercontent.com/BakaPraselol/MRCBV4LSB4KRS/main/Loader")
-addButton("Chat Bypass #3", "https://pastefy.app/r39aZhXJ/raw")
+addButton("Chat Bypass (OUTDATED) #2", "https://raw.githubusercontent.com/BakaPraselol/MRCBV4LSB4KRS/main/Loader")
+addButton("Chat Bypass (Artify) #3", "https://pastefy.app/r39aZhXJ/raw")
 addButton("Chat Bypass #4", "https://raw.githubusercontent.com/Synergy-Networks/products/main/BetterBypasser/loader.lua")
 addButton("Bang Inf Yield #1", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source")
-
+addButton("Bang Inf Yield (Dolphin) #2", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source")
+addButton("Inf Yield #3", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source")
+addButton("MM2 GUI", "https://raw.githubusercontent.com/Doggo-cryto/EclipseMM2/master/Script")
+addButton("Faker IPs", "https://raw.githubusercontent.com/BingusWR/FakeRobloxIPGrabber/refs/heads/main/FERobloxIpGrabberScrip")
+addButton("Jack Toothpaste (r6)", "https://pastefy.app/wa3v2Vgm/raw")
+addButton("FE Bangers", "https://gist.githubusercontent.com/benguss/282f472a00289fc4fb8ac95a5c0a6488/raw/23a402a19a7bdead6080dfe36498b68d0c3de779/Roblox%2520Bang%2520Script%2520(NSFW)")
+addButton("Teleport Script", "https://raw.githubusercontent.com/hyperneongaming/rbxscripts/refs/heads/main/TP%20Script")
