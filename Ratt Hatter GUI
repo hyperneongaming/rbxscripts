@@ -63,31 +63,33 @@ Title.Parent = InnerBlackBorder
 local CloseButton = Instance.new("TextButton")
 CloseButton.Size = UDim2.new(0, 30, 0, 30)
 CloseButton.Position = UDim2.new(1, -40, 0, 5)
-CloseButton.BackgroundColor3 = Color3.fromRGB(50, 0, 0)
+CloseButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
 CloseButton.Text = "X"
 CloseButton.Font = Enum.Font.SourceSansBold
-CloseButton.TextColor3 = Color3.new(1, 1, 1)
+CloseButton.TextColor3 = Color3.new(0, 0, 0)
 CloseButton.TextSize = 18
 CloseButton.Parent = InnerBlackBorder
 
 -- Rounded corners for Close button
 local UICornerCloseButton = Instance.new("UICorner", CloseButton)
-UICornerCloseButton.CornerRadius = UDim.new(0, 15)
+UICornerCloseButton.CornerRadius = UDim.new(0, 5)
 
 -- Minimize button setup
 local MinimizeButton = Instance.new("TextButton")
 MinimizeButton.Size = UDim2.new(0, 30, 0, 30)
 MinimizeButton.Position = UDim2.new(1, -80, 0, 5)
-MinimizeButton.BackgroundColor3 = Color3.fromRGB(50, 0, 0)
+MinimizeButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+MinimizeButton.BorderSizePixel = 1
+MinimizeButton.BorderColor3 = Color3.fromRGB(255, 0, 0)
 MinimizeButton.Text = "_"
 MinimizeButton.Font = Enum.Font.SourceSansBold
-MinimizeButton.TextColor3 = Color3.new(1, 1, 1)
+MinimizeButton.TextColor3 = Color3.fromRGB(255, 0, 0)
 MinimizeButton.TextSize = 18
 MinimizeButton.Parent = InnerBlackBorder
 
 -- Rounded corners for Minimize button
 local UICornerMinimizeButton = Instance.new("UICorner", MinimizeButton)
-UICornerMinimizeButton.CornerRadius = UDim.new(0, 15)
+UICornerMinimizeButton.CornerRadius = UDim.new(0, 5)
 
 -- Buttons frame for the script buttons
 local ButtonsFrame = Instance.new("ScrollingFrame")
@@ -207,17 +209,19 @@ local buttonScripts = {
 -- Dynamically create the script buttons
 for _, script in ipairs(buttonScripts) do
     local button = Instance.new("TextButton")
-    button.Size = UDim2.new(0, 200, 0, 40)
+    button.Size = UDim2.new(1, 0, 0, 40) -- Adjusted to fit the width of the GUI
     button.Text = script[1]
     button.Font = Enum.Font.Code
     button.TextSize = 16
-    button.TextColor3 = Color3.fromRGB(255, 255, 255)
-    button.BackgroundColor3 = Color3.fromRGB(50, 0, 0)  -- Dark red background
+    button.TextColor3 = Color3.fromRGB(255, 0, 0) -- Red text color
+    button.BackgroundColor3 = Color3.fromRGB(0, 0, 0)  -- Black background
+    button.BorderSizePixel = 1
+    button.BorderColor3 = Color3.fromRGB(255, 0, 0) -- Red border
     button.Parent = ButtonsFrame
 
     -- Rounded corners for buttons
     local UICornerButton = Instance.new("UICorner", button)
-    UICornerButton.CornerRadius = UDim.new(0, 20)
+    UICornerButton.CornerRadius = UDim.new(0, 5)
 
     -- Button click event
     button.MouseButton1Click:Connect(function()
