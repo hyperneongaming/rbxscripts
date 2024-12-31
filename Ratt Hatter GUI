@@ -12,10 +12,10 @@ ScreenGui.Parent = CoreGui
 
 -- Main frame setup with black background, border, and rounded edges
 local MainFrame = Instance.new("Frame")
-MainFrame.Size = UDim2.new(0, 600, 0, 800)
+MainFrame.Size = UDim2.new(0, 400, 0, 600)
 MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
-MainFrame.BackgroundTransparency = 0
+MainFrame.BackgroundTransparency = 0.1
 MainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 MainFrame.BorderSizePixel = 0
 MainFrame.Parent = ScreenGui
@@ -70,6 +70,10 @@ CloseButton.TextColor3 = Color3.new(1, 1, 1)
 CloseButton.TextSize = 18
 CloseButton.Parent = InnerBlackBorder
 
+-- Rounded corners for Close button
+local UICornerCloseButton = Instance.new("UICorner", CloseButton)
+UICornerCloseButton.CornerRadius = UDim.new(0, 15)
+
 -- Minimize button setup
 local MinimizeButton = Instance.new("TextButton")
 MinimizeButton.Size = UDim2.new(0, 30, 0, 30)
@@ -80,6 +84,10 @@ MinimizeButton.Font = Enum.Font.SourceSansBold
 MinimizeButton.TextColor3 = Color3.new(1, 1, 1)
 MinimizeButton.TextSize = 18
 MinimizeButton.Parent = InnerBlackBorder
+
+-- Rounded corners for Minimize button
+local UICornerMinimizeButton = Instance.new("UICorner", MinimizeButton)
+UICornerMinimizeButton.CornerRadius = UDim.new(0, 15)
 
 -- Buttons frame for the script buttons
 local ButtonsFrame = Instance.new("ScrollingFrame")
@@ -139,24 +147,12 @@ Title.TextTransparency = 1
 CloseButton.TextTransparency = 1
 MinimizeButton.TextTransparency = 1
 
-local fadeMainFrame = TweenService:Create(MainFrame, TweenInfo.new(2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BackgroundTransparency = 0.1})
-local fadeTitle = TweenService:Create(Title, TweenInfo.new(2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 0})
-local fadeClose = TweenService:Create(CloseButton, TweenInfo.new(2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 0})
-local fadeMinimize = TweenService:Create(MinimizeButton, TweenInfo.new(2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 0})
+local fadeMainFrame = TweenService:Create(MainFrame, TweenInfo.new(1.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BackgroundTransparency = 0.1})
+local fadeTitle = TweenService:Create(Title, TweenInfo.new(1.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 0})
+local fadeClose = TweenService:Create(CloseButton, TweenInfo.new(1.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 0})
+local fadeMinimize = TweenService:Create(MinimizeButton, TweenInfo.new(1.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 0})
 
 fadeMainFrame:Play()
-fadeTitle:Play()
-fadeClose:Play()
-fadeMinimize:Play()
-
--- Fade-in effect for buttons
-for _, button in ipairs(ButtonsFrame:GetChildren()) do
-    if button:IsA("TextButton") then
-        button.TextTransparency = 1
-        local fadeButton = TweenService:Create(button, TweenInfo.new(2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 0})
-        fadeButton:Play()
-    end
-end
 
 -- Minimize button functionality (with unminimize feature)
 local isMinimized = false
@@ -165,7 +161,7 @@ MinimizeButton.MouseButton1Click:Connect(function()
         local minimizeTween = TweenService:Create(
             MainFrame,
             TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut),
-            {Size = UDim2.new(0, 600, 0, 100)}  -- Just minimize
+            {Size = UDim2.new(0, 400, 0, 100)}  -- Just minimize
         )
         minimizeTween:Play()
         isMinimized = true
@@ -173,7 +169,7 @@ MinimizeButton.MouseButton1Click:Connect(function()
         local unMinimizeTween = TweenService:Create(
             MainFrame,
             TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut),
-            {Size = UDim2.new(0, 600, 0, 800)}  -- Unminimize to original size
+            {Size = UDim2.new(0, 400, 0, 600)}  -- Unminimize to original size
         )
         unMinimizeTween:Play()
         isMinimized = false
@@ -228,3 +224,19 @@ for _, script in ipairs(buttonScripts) do
         loadstring(script[2])()  -- Execute the associated script
     end)
 end
+
+-- Additional fade-in effects for buttons
+for index, button in ipairs(ButtonsFrame:GetChildren()) do
+    if button:IsA("TextButton") then
+        button.TextTransparency = 1
+        local fadeButton = TweenService:Create(button, TweenInfo.new(1 + index * 0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 0})
+        fadeButton:Play()
+    end
+end
+
+-- Play fade-in effects for the title and buttons after the main frame
+fadeMainFrame.Completed:Connect(function()
+    fadeTitle:Play()
+    fadeClose:Play()
+    fadeMinimize:Play()
+end)
