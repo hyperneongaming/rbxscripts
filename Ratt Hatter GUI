@@ -1,6 +1,6 @@
--- Dependencies
 local TweenService = game:GetService("TweenService")
 local CoreGui = game:GetService("CoreGui")
+local UIS = game:GetService("UserInputService")
 
 -- GUI Setup
 local ScreenGui = Instance.new("ScreenGui", CoreGui)
@@ -8,8 +8,8 @@ ScreenGui.IgnoreGuiInset = true
 
 local MainFrame = Instance.new("Frame", ScreenGui)
 MainFrame.Size = UDim2.new(0, 300, 0, 400)
-MainFrame.Position = UDim2.new(0.5, -150, 0.5, -200)
 MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
 MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 MainFrame.BorderSizePixel = 0
 
@@ -23,34 +23,43 @@ BorderFrame.BackgroundColor3 = Color3.fromRGB(139, 0, 0)
 BorderFrame.BorderSizePixel = 0
 BorderFrame.ZIndex = 0
 
-local UIGradient = Instance.new("UIGradient", MainFrame)
-UIGradient.Color = ColorSequence.new{
-    ColorSequenceKeypoint.new(0, Color3.fromRGB(50, 50, 50)),
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(30, 30, 30))
-}
+local BorderCorner = Instance.new("UICorner", BorderFrame)
+BorderCorner.CornerRadius = UDim.new(0, 10)
 
 local Title = Instance.new("TextLabel", MainFrame)
-Title.Size = UDim2.new(1, -20, 0, 40)
-Title.Position = UDim2.new(0, 10, 0, 10)
+Title.Size = UDim2.new(1, -60, 0, 40)
+Title.Position = UDim2.new(0, 10, 0, 5)
 Title.BackgroundTransparency = 1
 Title.Text = "🐀 Ratt Hatter"
 Title.Font = Enum.Font.Code
-Title.TextSize = 24
+Title.TextSize = 20
 Title.TextColor3 = Color3.fromRGB(255, 0, 0)
 Title.TextStrokeTransparency = 0.8
 Title.TextXAlignment = Enum.TextXAlignment.Left
 
 local CloseButton = Instance.new("TextButton", MainFrame)
 CloseButton.Size = UDim2.new(0, 30, 0, 30)
-CloseButton.Position = UDim2.new(1, -40, 0, 10)
+CloseButton.Position = UDim2.new(1, -40, 0, 5)
 CloseButton.BackgroundColor3 = Color3.fromRGB(50, 0, 0)
 CloseButton.Text = "X"
 CloseButton.Font = Enum.Font.SourceSansBold
 CloseButton.TextColor3 = Color3.new(1, 1, 1)
 CloseButton.TextSize = 18
 
-local UICornerClose = Instance.new("UICorner", CloseButton)
-UICornerClose.CornerRadius = UDim.new(0, 8)
+local MinimizeButton = Instance.new("TextButton", MainFrame)
+MinimizeButton.Size = UDim2.new(0, 30, 0, 30)
+MinimizeButton.Position = UDim2.new(1, -80, 0, 5)
+MinimizeButton.BackgroundColor3 = Color3.fromRGB(50, 0, 0)
+MinimizeButton.Text = "_"
+MinimizeButton.Font = Enum.Font.SourceSansBold
+MinimizeButton.TextColor3 = Color3.new(1, 1, 1)
+MinimizeButton.TextSize = 18
+
+local ButtonUICorner = Instance.new("UICorner", MinimizeButton)
+ButtonUICorner.CornerRadius = UDim.new(0, 8)
+
+local CloseUICorner = Instance.new("UICorner", CloseButton)
+CloseUICorner.CornerRadius = UDim.new(0, 8)
 
 local ButtonsFrame = Instance.new("ScrollingFrame", MainFrame)
 ButtonsFrame.Size = UDim2.new(1, -20, 1, -70)
@@ -62,43 +71,58 @@ ButtonsFrame.CanvasSize = UDim2.new(0, 0, 0, 500)
 local UIListLayout = Instance.new("UIListLayout", ButtonsFrame)
 UIListLayout.Padding = UDim.new(0, 5)
 
--- Function to Add Buttons
-local function CreateButton(name, script)
-    local Button = Instance.new("TextButton", ButtonsFrame)
-    Button.Size = UDim2.new(1, 0, 0, 30)
-    Button.BackgroundColor3 = Color3.fromRGB(50, 0, 0)
-    Button.Text = name
-    Button.Font = Enum.Font.Code
-    Button.TextSize = 14
-    Button.TextColor3 = Color3.new(1, 1, 1)
-    local UICornerButton = Instance.new("UICorner", Button)
-    UICornerButton.CornerRadius = UDim.new(0, 6)
-    Button.MouseButton1Click:Connect(function()
-        loadstring(script)()
-    end)
-    return Button
+-- Fade-in effect
+MainFrame.BackgroundTransparency = 1
+MainFrame.Visible = false
+BorderFrame.BackgroundTransparency = 1
+Title.TextTransparency = 1
+
+local function FadeIn()
+    MainFrame.Visible = true
+    TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quad), {BackgroundTransparency = 0}):Play()
+    TweenService:Create(BorderFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quad), {BackgroundTransparency = 0}):Play()
+    TweenService:Create(Title, TweenInfo.new(0.5, Enum.EasingStyle.Quad), {TextTransparency = 0}):Play()
 end
 
--- Adding Buttons
-CreateButton("Chat Bypass #1", "loadstring(game:HttpGet('https://pastefy.app/CJ0E33tA/raw'))()")
-CreateButton("Chat Bypass (OUTDATED) #2", "loadstring(game:HttpGet('https://raw.githubusercontent.com/BakaPraselol/MRCBV4LSB4KRS/main/Loader'))()")
-CreateButton("Chat Bypass (Artify) #3", "loadstring(game:HttpGet('https://pastefy.app/r39aZhXJ/raw'))()")
-CreateButton("Chat Chat Bypass #4", "loadstring(game:HttpGet('https://raw.githubusercontent.com/Synergy-Networks/products/main/BetterBypasser/loader.lua',true))()")
-CreateButton("Bang Inf Yield #1", "loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()")
-CreateButton("Bang Inf Yield (Dolphin) #2", "loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()")
-CreateButton("Inf Yield #3", "loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source',true))()")
-CreateButton("MM2 GUI", "loadstring(game:HttpGet('https://raw.githubusercontent.com/Doggo-cryto/EclipseMM2/master/Script', true))()")
-CreateButton("Faker IPs", "loadstring(game:HttpGet('https://raw.githubusercontent.com/BingusWR/FakeRobloxIPGrabber/refs/heads/main/FERobloxIpGrabberScrip'))()")
-CreateButton("Jack Toothpaste (r6)", "loadstring(game:HttpGet('https://pastefy.app/wa3v2Vgm/raw'))('Spider Script')")
-CreateButton("FE Bangers", "loadstring(game:HttpGet('https://gist.githubusercontent.com/benguss/282f472a00289fc4fb8ac95a5c0a6488/raw/23a402a19a7bdead6080dfe36498b68d0c3de779/Roblox%2520Bang%2520Script%2520(NSFW)'))()")
-CreateButton("Teleport Script", "loadstring(game:HttpGet('https://raw.githubusercontent.com/hyperneongaming/rbxscripts/refs/heads/main/TP%20Script'))()")
+local function FadeOut(callback)
+    local fadeTween1 = TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quad), {BackgroundTransparency = 1})
+    local fadeTween2 = TweenService:Create(BorderFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quad), {BackgroundTransparency = 1})
+    local fadeTween3 = TweenService:Create(Title, TweenInfo.new(0.5, Enum.EasingStyle.Quad), {TextTransparency = 1})
+    fadeTween1:Play()
+    fadeTween2:Play()
+    fadeTween3:Play()
+    fadeTween1.Completed:Connect(callback)
+end
 
--- Close Behavior
-CloseButton.MouseButton1Click:Connect(function()
-    ScreenGui:Destroy()
+-- Minimize animation
+local minimized = false
+local originalSize = MainFrame.Size
+local originalPosition = MainFrame.Position
+
+MinimizeButton.MouseButton1Click:Connect(function()
+    if minimized then
+        TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {
+            Size = originalSize,
+            Position = originalPosition,
+        }):Play()
+        minimized = false
+    else
+        TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {
+            Size = UDim2.new(0, 300, 0, 40),
+            Position = UDim2.new(0.5, -150, 0, 0),
+        }):Play()
+        minimized = true
+    end
 end)
 
--- Dragging Logic
+-- Close button functionality
+CloseButton.MouseButton1Click:Connect(function()
+    FadeOut(function()
+        ScreenGui:Destroy()
+    end)
+end)
+
+-- Dragging functionality
 local dragging, dragInput, dragStart, startPos
 
 MainFrame.InputBegan:Connect(function(input)
@@ -120,9 +144,12 @@ MainFrame.InputChanged:Connect(function(input)
     end
 end)
 
-game:GetService("UserInputService").InputChanged:Connect(function(input)
+UIS.InputChanged:Connect(function(input)
     if input == dragInput and dragging then
         local delta = input.Position - dragStart
         MainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
     end
 end)
+
+-- Initial fade-in
+FadeIn()
