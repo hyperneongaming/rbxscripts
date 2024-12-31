@@ -3,6 +3,7 @@ local TweenService = game:GetService("TweenService")
 local CoreGui = game:GetService("CoreGui")
 local UIS = game:GetService("UserInputService")
 local GuiService = game:GetService("GuiService")
+local SoundService = game:GetService("SoundService")
 
 -- Create the ScreenGui
 local ScreenGui = Instance.new("ScreenGui", CoreGui)
@@ -10,10 +11,10 @@ ScreenGui.IgnoreGuiInset = true
 
 -- Main frame setup with black background, border, and rounded edges
 local MainFrame = Instance.new("Frame", ScreenGui)
-MainFrame.Size = UDim2.new(0, 600, 0, 600)
+MainFrame.Size = UDim2.new(0, 600, 0, 800)
 MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
-MainFrame.BackgroundTransparency = 0  -- Black background
+MainFrame.BackgroundTransparency = 0
 MainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 MainFrame.BorderSizePixel = 0
 
@@ -79,7 +80,7 @@ ButtonsFrame.Size = UDim2.new(1, -20, 1, -70)
 ButtonsFrame.Position = UDim2.new(0, 10, 0, 50)
 ButtonsFrame.BackgroundTransparency = 1
 ButtonsFrame.ScrollBarThickness = 5
-ButtonsFrame.CanvasSize = UDim2.new(0, 0, 0, 600)
+ButtonsFrame.CanvasSize = UDim2.new(0, 0, 0, 800)
 
 -- Layout for the buttons in the frame
 local UIListLayout = Instance.new("UIListLayout", ButtonsFrame)
@@ -163,7 +164,7 @@ MinimizeButton.MouseButton1Click:Connect(function()
         local unMinimizeTween = TweenService:Create(
             MainFrame,
             TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut),
-            {Size = UDim2.new(0, 600, 0, 600)}  -- Unminimize to original size
+            {Size = UDim2.new(0, 600, 0, 800)}  -- Unminimize to original size
         )
         unMinimizeTween:Play()
         isMinimized = false
