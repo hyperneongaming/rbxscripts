@@ -2,6 +2,7 @@
 local TweenService = game:GetService("TweenService")
 local CoreGui = game:GetService("CoreGui")
 local UIS = game:GetService("UserInputService")
+local GuiService = game:GetService("GuiService")
 
 -- GUI Setup
 local ScreenGui = Instance.new("ScreenGui", CoreGui)
@@ -12,7 +13,9 @@ MainFrame.Size = UDim2.new(0, 300, 0, 400)
 MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
 MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+MainFrame.BackgroundTransparency = 0.3
 MainFrame.BorderSizePixel = 0
+MainFrame.BackgroundBlur = true
 
 local UICorner = Instance.new("UICorner", MainFrame)
 UICorner.CornerRadius = UDim.new(0, 10)
@@ -66,6 +69,42 @@ ButtonsFrame.CanvasSize = UDim2.new(0, 0, 0, 600)
 local UIListLayout = Instance.new("UIListLayout", ButtonsFrame)
 UIListLayout.Padding = UDim.new(0, 5)
 
+-- Make GUI draggable
+local dragToggle = nil
+local dragSpeed = 0.1
+local dragStart = nil
+local startPos = nil
+
+local function update(input)
+	local delta = input.Position - dragStart
+	MainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+end
+
+MainFrame.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		dragToggle = true
+		dragStart = input.Position
+		startPos = MainFrame.Position
+		input.Changed:Connect(function()
+			if dragToggle == false then
+				return
+			end
+		end)
+	end
+end)
+
+MainFrame.InputEnded:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		dragToggle = false
+	end
+end)
+
+UIS.InputChanged:Connect(function(input)
+	if dragToggle then
+		update(input)
+	end
+end)
+
 -- Fade In Effect
 MainFrame.BackgroundTransparency = 1
 BorderFrame.BackgroundTransparency = 1
@@ -99,8 +138,10 @@ for _, scriptData in ipairs(buttonScripts) do
     Button.Text = scriptData[1]
     Button.Font = Enum.Font.SourceSansBold
     Button.TextSize = 16
-    Button.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    Button.BackgroundColor3 = Color3.fromRGB(255, 0, 0)  -- Red themed buttons
     Button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    local buttonCorner = Instance.new("UICorner", Button)
+    buttonCorner.CornerRadius = UDim.new(0, 10)
     
     Button.MouseButton1Click:Connect(function()
         loadstring(scriptData[2])()
@@ -111,8 +152,8 @@ end
 MinimizeButton.MouseButton1Click:Connect(function()
     local minimizeTween = TweenService:Create(
         MainFrame,
-        TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut),
-        {Position = UDim2.new(0.5, 0, -0.5, 0)}
+        TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut),
+        {Size = UDim2.new(0, 300, 0, 50)}
     )
     minimizeTween:Play()
 end)
