@@ -1,8 +1,13 @@
+-- Ensure the script is running in the right context (Client)
+if not game:IsLoaded() then
+    game.Loaded:Wait()
+end
+
 -- Create the ScreenGui for the player
 local player = game.Players.LocalPlayer
 local screenGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 screenGui.Name = "RattHatterV4Gui"
-screenGui.ResetOnSpawn = false  -- Keeps the GUI persistent after respawn
+screenGui.ResetOnSpawn = false
 
 -- Create the main frame
 local mainFrame = Instance.new("Frame", screenGui)
@@ -13,7 +18,7 @@ mainFrame.BorderSizePixel = 0
 mainFrame.Active = true
 mainFrame.Draggable = true
 
--- Gradient background for the main frame with texture
+-- Add UIGradient
 local frameGradient = Instance.new("UIGradient", mainFrame)
 frameGradient.Color = ColorSequence.new({
     ColorSequenceKeypoint.new(0, Color3.fromRGB(30, 0, 0)),
@@ -21,7 +26,7 @@ frameGradient.Color = ColorSequence.new({
 })
 frameGradient.Rotation = 45
 
--- Add texture effect to the main frame
+-- Add texture effect
 local texture = Instance.new("ImageLabel", mainFrame)
 texture.Size = UDim2.new(1, 0, 1, 0)
 texture.Position = UDim2.new(0, 0, 0, 0)
@@ -29,14 +34,9 @@ texture.BackgroundTransparency = 1
 texture.Image = "rbxassetid://123456789"  -- Replace with your desired texture ID
 texture.ImageTransparency = 0.5
 
--- Slight blur effect and transparency for the background
-local blur = Instance.new("BlurEffect", screenGui)
+-- Blur effect (if you want it)
+local blur = Instance.new("BlurEffect", game.Lighting)
 blur.Size = 4
-screenGui.Parent = game:GetService("Lighting")  -- Apply blur to entire screen
-
--- Add rounded corners to the main frame
-local mainFrameCorner = Instance.new("UICorner", mainFrame)
-mainFrameCorner.CornerRadius = UDim.new(0, 15)
 
 -- Create the title label
 local titleLabel = Instance.new("TextLabel", mainFrame)
@@ -49,7 +49,6 @@ titleLabel.TextScaled = true
 titleLabel.Font = Enum.Font.GothamBold
 titleLabel.TextStrokeTransparency = 0.5
 titleLabel.TextStrokeColor3 = Color3.fromRGB(200, 0, 0)
-titleLabel.TextTransparency = 1  -- Start as invisible for fade-in effect
 
 -- Create the close button
 local closeButton = Instance.new("TextButton", mainFrame)
@@ -61,11 +60,11 @@ closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 closeButton.Font = Enum.Font.GothamBold
 closeButton.TextScaled = true
 closeButton.BorderSizePixel = 0
-closeButton.TextTransparency = 1  -- Start as invisible for fade-in effect
 
--- Add rounded corners to the close button
-local closeButtonCorner = Instance.new("UICorner", closeButton)
-closeButtonCorner.CornerRadius = UDim.new(0, 10)
+-- Close functionality
+closeButton.MouseButton1Click:Connect(function()
+    screenGui:Destroy()
+end)
 
 -- Create the minimize button
 local minimizeButton = Instance.new("TextButton", mainFrame)
@@ -77,28 +76,17 @@ minimizeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 minimizeButton.Font = Enum.Font.GothamBold
 minimizeButton.TextScaled = true
 minimizeButton.BorderSizePixel = 0
-minimizeButton.TextTransparency = 1  -- Start as invisible for fade-in effect
-
--- Add rounded corners to the minimize button
-local minimizeButtonCorner = Instance.new("UICorner", minimizeButton)
-minimizeButtonCorner.CornerRadius = UDim.new(0, 10)
 
 -- Minimize functionality
 local minimized = false
 minimizeButton.MouseButton1Click:Connect(function()
     if not minimized then
-        game:GetService("TweenService"):Create(mainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(0, 0, 0, 50), Position = UDim2.new(1, -50, 0, 5)}):Play()
+        mainFrame.Size = UDim2.new(0, 0, 0, 50)
         minimized = true
     else
-        game:GetService("TweenService"):Create(mainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(0, 500, 0, 600), Position = UDim2.new(0.5, -250, 0.5, -300)}):Play()
+        mainFrame.Size = UDim2.new(0, 500, 0, 600)
         minimized = false
     end
-end)
-
--- Close button functionality
-closeButton.MouseButton1Click:Connect(function()
-    game:GetService("TweenService"):Create(mainFrame, TweenInfo.new(1, Enum.EasingStyle.Linear, Enum.EasingDirection.Out), {TextTransparency = 1}):Play()
-    screenGui:Destroy()
 end)
 
 -- Create the scrolling frame for buttons
@@ -108,18 +96,13 @@ scrollFrame.Position = UDim2.new(0, 10, 0, 70)
 scrollFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 scrollFrame.ScrollBarThickness = 10
 scrollFrame.BorderSizePixel = 0
-scrollFrame.BackgroundTransparency = 0.5
-
--- Add rounded corners to the scrolling frame
-local scrollFrameCorner = Instance.new("UICorner", scrollFrame)
-scrollFrameCorner.CornerRadius = UDim.new(0, 15)
 
 -- Layout for buttons
 local layout = Instance.new("UIGridLayout", scrollFrame)
 layout.CellSize = UDim2.new(0, 120, 0, 50)
 layout.CellPadding = UDim2.new(0, 5, 0, 5)
 
--- Function to add buttons with rounded corners and smooth transitions
+-- Function to add buttons
 local function addButton(text, scriptUrl)
     local button = Instance.new("TextButton", scrollFrame)
     button.Size = UDim2.new(0, 120, 0, 50)
@@ -128,38 +111,28 @@ local function addButton(text, scriptUrl)
     button.BackgroundColor3 = Color3.fromRGB(80, 0, 0)
     button.Font = Enum.Font.Gotham
     button.TextScaled = true
-    button.TextTransparency = 1  -- Start as invisible for fade-in effect
-
-    -- Add rounded corners to the button
-    local buttonCorner = Instance.new("UICorner", button)
-    buttonCorner.CornerRadius = UDim.new(0, 10)
 
     -- Button hover effects
     button.MouseEnter:Connect(function()
-        game:GetService("TweenService"):Create(button, TweenInfo.new(0.2, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {BackgroundColor3 = Color3.fromRGB(200, 0, 0), TextTransparency = 0}):Play()
+        button.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
     end)
     button.MouseLeave:Connect(function()
-        game:GetService("TweenService"):Create(button, TweenInfo.new(0.2, Enum.EasingStyle.Sine, Enum.EasingDirection.In), {BackgroundColor3 = Color3.fromRGB(80, 0, 0), TextTransparency = 0.5}):Play()
+        button.BackgroundColor3 = Color3.fromRGB(80, 0, 0)
     end)
 
-    -- Button click functionality with script loading
+    -- Button click functionality
     button.MouseButton1Click:Connect(function()
-        game:GetService("TweenService"):Create(button, TweenInfo.new(0.1, Enum.EasingStyle.Bounce, Enum.EasingDirection.Out), {TextTransparency = 1}):Play()
-        wait(0.2)
         loadstring(game:HttpGet(scriptUrl))()
     end)
-
-    -- Fade-in effect for each button
-    game:GetService("TweenService"):Create(button, TweenInfo.new(0.5, Enum.EasingStyle.Linear, Enum.EasingDirection.Out), {TextTransparency = 0}):Play()
 end
 
--- Add buttons with respective scripts
+-- Add buttons with scripts
 addButton("Chat Bypass #1", "https://pastefy.app/CJ0E33tA/raw")
 addButton("Chat Bypass #2", "https://raw.githubusercontent.com/BakaPraselol/MRCBV4LSB4KRS/main/Loader")
-addButton("Chat Bypass (Artify)", "https://pastefy.app/r39aZhXJ/raw")
+addButton("Chat Bypass #3", "https://pastefy.app/r39aZhXJ/raw")
 addButton("Chat Bypass #4", "https://raw.githubusercontent.com/Synergy-Networks/products/main/BetterBypasser/loader.lua")
 addButton("Bang Inf Yield #1", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source")
-addButton("Bang Inf Yield (Dolphin)", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source")
+addButton("Bang Inf Yield #2", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source")
 addButton("Inf Yield #3", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source")
 addButton("MM2 GUI", "https://raw.githubusercontent.com/Doggo-cryto/EclipseMM2/master/Script")
 addButton("Faker IPs", "https://raw.githubusercontent.com/BingusWR/FakeRobloxIPGrabber/refs/heads/main/FERobloxIpGrabberScrip")
