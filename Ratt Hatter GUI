@@ -6,31 +6,35 @@ local GuiService = game:GetService("GuiService")
 local SoundService = game:GetService("SoundService")
 
 -- Create the ScreenGui
-local ScreenGui = Instance.new("ScreenGui", CoreGui)
+local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.IgnoreGuiInset = true
+ScreenGui.Parent = CoreGui
 
 -- Main frame setup with black background, border, and rounded edges
-local MainFrame = Instance.new("Frame", ScreenGui)
+local MainFrame = Instance.new("Frame")
 MainFrame.Size = UDim2.new(0, 600, 0, 800)
 MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
 MainFrame.BackgroundTransparency = 0
 MainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 MainFrame.BorderSizePixel = 0
+MainFrame.Parent = ScreenGui
 
 -- Outer Red Border
-local OuterRedBorder = Instance.new("Frame", MainFrame)
+local OuterRedBorder = Instance.new("Frame")
 OuterRedBorder.Size = UDim2.new(1, 8, 1, 8)
 OuterRedBorder.Position = UDim2.new(0, -4, 0, -4)
-OuterRedBorder.BackgroundColor3 = Color3.fromRGB(255, 0, 0)  -- Red border
+OuterRedBorder.BackgroundColor3 = Color3.fromRGB(255, 0, 0) -- Red border
 OuterRedBorder.BorderSizePixel = 0
+OuterRedBorder.Parent = MainFrame
 
 -- Inner Black Border
-local InnerBlackBorder = Instance.new("Frame", MainFrame)
+local InnerBlackBorder = Instance.new("Frame")
 InnerBlackBorder.Size = UDim2.new(1, -16, 1, -16)
 InnerBlackBorder.Position = UDim2.new(0, 8, 0, 8)
-InnerBlackBorder.BackgroundColor3 = Color3.fromRGB(0, 0, 0)  -- Black border
+InnerBlackBorder.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Black border
 InnerBlackBorder.BorderSizePixel = 0
+InnerBlackBorder.Parent = MainFrame
 
 -- Rounded corners for the MainFrame and borders
 local UICornerMain = Instance.new("UICorner", MainFrame)
@@ -43,19 +47,20 @@ local UICornerInner = Instance.new("UICorner", InnerBlackBorder)
 UICornerInner.CornerRadius = UDim.new(0, 20)
 
 -- Title label setup
-local Title = Instance.new("TextLabel", InnerBlackBorder)
+local Title = Instance.new("TextLabel")
 Title.Size = UDim2.new(1, -60, 0, 40)
 Title.Position = UDim2.new(0, 10, 0, 5)
 Title.BackgroundTransparency = 1
 Title.Text = "🐀 Ratt Hatter"
 Title.Font = Enum.Font.Code
 Title.TextSize = 24
-Title.TextColor3 = Color3.fromRGB(255, 0, 0)  -- Red text
+Title.TextColor3 = Color3.fromRGB(255, 0, 0) -- Red text
 Title.TextStrokeTransparency = 0.8
 Title.TextXAlignment = Enum.TextXAlignment.Left
+Title.Parent = InnerBlackBorder
 
 -- Close button setup
-local CloseButton = Instance.new("TextButton", InnerBlackBorder)
+local CloseButton = Instance.new("TextButton")
 CloseButton.Size = UDim2.new(0, 30, 0, 30)
 CloseButton.Position = UDim2.new(1, -40, 0, 5)
 CloseButton.BackgroundColor3 = Color3.fromRGB(50, 0, 0)
@@ -63,9 +68,10 @@ CloseButton.Text = "X"
 CloseButton.Font = Enum.Font.SourceSansBold
 CloseButton.TextColor3 = Color3.new(1, 1, 1)
 CloseButton.TextSize = 18
+CloseButton.Parent = InnerBlackBorder
 
 -- Minimize button setup
-local MinimizeButton = Instance.new("TextButton", InnerBlackBorder)
+local MinimizeButton = Instance.new("TextButton")
 MinimizeButton.Size = UDim2.new(0, 30, 0, 30)
 MinimizeButton.Position = UDim2.new(1, -80, 0, 5)
 MinimizeButton.BackgroundColor3 = Color3.fromRGB(50, 0, 0)
@@ -73,18 +79,21 @@ MinimizeButton.Text = "_"
 MinimizeButton.Font = Enum.Font.SourceSansBold
 MinimizeButton.TextColor3 = Color3.new(1, 1, 1)
 MinimizeButton.TextSize = 18
+MinimizeButton.Parent = InnerBlackBorder
 
 -- Buttons frame for the script buttons
-local ButtonsFrame = Instance.new("ScrollingFrame", InnerBlackBorder)
+local ButtonsFrame = Instance.new("ScrollingFrame")
 ButtonsFrame.Size = UDim2.new(1, -20, 1, -70)
 ButtonsFrame.Position = UDim2.new(0, 10, 0, 50)
 ButtonsFrame.BackgroundTransparency = 1
 ButtonsFrame.ScrollBarThickness = 5
-ButtonsFrame.CanvasSize = UDim2.new(0, 0, 0, 800)
+ButtonsFrame.CanvasSize = UDim2.new(0, 0, 0, 1200)
+ButtonsFrame.Parent = InnerBlackBorder
 
 -- Layout for the buttons in the frame
-local UIListLayout = Instance.new("UIListLayout", ButtonsFrame)
+local UIListLayout = Instance.new("UIListLayout")
 UIListLayout.Padding = UDim.new(0, 5)
+UIListLayout.Parent = ButtonsFrame
 
 -- Function to make the GUI draggable
 local dragToggle = nil
@@ -188,7 +197,7 @@ local buttonScripts = {
     {"Chat Bypass #1", "loadstring(game:HttpGet('https://pastefy.app/CJ0E33tA/raw'))()"},
     {"Chat Bypass (OUTDATED) #2", "loadstring(game:HttpGet('https://raw.githubusercontent.com/BakaPraselol/MRCBV4LSB4KRS/main/Loader'))()"},
     {"Chat Bypass (Artify) #3", "loadstring(game:HttpGet('https://pastefy.app/r39aZhXJ/raw'))()"},
-    {"Chat Chat Bypass #4", "loadstring(game:HttpGet('https://raw.githubusercontent.com/Synergy-Networks/products/main/BetterBypasser/loader.lua',true))()"},
+    {"Chat Bypass #4", "loadstring(game:HttpGet('https://raw.githubusercontent.com/Synergy-Networks/products/main/BetterBypasser/loader.lua'))()"},
     {"Bang Inf Yield #1", "loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()"},
     {"Bang Inf Yield (Dolphin) #2", "loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()"},
     {"Inf Yield #3", "loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source',true))()"},
