@@ -66,6 +66,16 @@ ButtonsFrame.CanvasSize = UDim2.new(0, 0, 0, 600)
 local UIListLayout = Instance.new("UIListLayout", ButtonsFrame)
 UIListLayout.Padding = UDim.new(0, 5)
 
+-- Fade In Effect
+MainFrame.BackgroundTransparency = 1
+BorderFrame.BackgroundTransparency = 1
+local fadeTween = TweenService:Create(
+    MainFrame,
+    TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+    {BackgroundTransparency = 0}
+)
+fadeTween:Play()
+
 -- List of buttons
 local buttonScripts = {
     {"Chat Bypass #1", "loadstring(game:HttpGet('https://pastefy.app/CJ0E33tA/raw'))()"},
@@ -96,3 +106,25 @@ for _, scriptData in ipairs(buttonScripts) do
         loadstring(scriptData[2])()
     end)
 end
+
+-- Minimize Animation
+MinimizeButton.MouseButton1Click:Connect(function()
+    local minimizeTween = TweenService:Create(
+        MainFrame,
+        TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut),
+        {Position = UDim2.new(0.5, 0, -0.5, 0)}
+    )
+    minimizeTween:Play()
+end)
+
+-- Close Animation
+CloseButton.MouseButton1Click:Connect(function()
+    local fadeOutTween = TweenService:Create(
+        MainFrame,
+        TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
+        {BackgroundTransparency = 1}
+    )
+    fadeOutTween:Play()
+    wait(0.5)
+    ScreenGui:Destroy()
+end)
