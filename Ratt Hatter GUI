@@ -1,45 +1,51 @@
--- Dependencies
+-- Setup necessary services
 local TweenService = game:GetService("TweenService")
 local CoreGui = game:GetService("CoreGui")
 local UIS = game:GetService("UserInputService")
 local GuiService = game:GetService("GuiService")
 
--- GUI Setup
+-- Create the ScreenGui
 local ScreenGui = Instance.new("ScreenGui", CoreGui)
 ScreenGui.IgnoreGuiInset = true
 
+-- Main frame setup with background transparency, border, and rounded edges
 local MainFrame = Instance.new("Frame", ScreenGui)
-MainFrame.Size = UDim2.new(0, 400, 0, 450)
+MainFrame.Size = UDim2.new(0, 600, 0, 600)
 MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
 MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-MainFrame.BackgroundTransparency = 0.2 -- Slight transparency
+MainFrame.BackgroundTransparency = 0.2  -- Slight transparency for background
 MainFrame.BorderSizePixel = 0
 
-local UICorner = Instance.new("UICorner", MainFrame)
-UICorner.CornerRadius = UDim.new(0, 10)
+-- Rounded corners for the MainFrame
+local UICornerMain = Instance.new("UICorner", MainFrame)
+UICornerMain.CornerRadius = UDim.new(0, 15)
 
+-- Border frame with red color
 local BorderFrame = Instance.new("Frame", MainFrame)
 BorderFrame.Size = UDim2.new(1, 8, 1, 8)
 BorderFrame.Position = UDim2.new(0, -4, 0, -4)
-BorderFrame.BackgroundColor3 = Color3.fromRGB(139, 0, 0)
+BorderFrame.BackgroundColor3 = Color3.fromRGB(139, 0, 0)  -- Red border
 BorderFrame.BorderSizePixel = 0
 BorderFrame.ZIndex = 0
 
-local BorderCorner = Instance.new("UICorner", BorderFrame)
-BorderCorner.CornerRadius = UDim.new(0, 10)
+-- Rounded corners for the border
+local UICornerBorder = Instance.new("UICorner", BorderFrame)
+UICornerBorder.CornerRadius = UDim.new(0, 15)
 
+-- Title label setup
 local Title = Instance.new("TextLabel", MainFrame)
 Title.Size = UDim2.new(1, -60, 0, 40)
 Title.Position = UDim2.new(0, 10, 0, 5)
 Title.BackgroundTransparency = 1
 Title.Text = "🐀 Ratt Hatter"
 Title.Font = Enum.Font.Code
-Title.TextSize = 20
-Title.TextColor3 = Color3.fromRGB(255, 0, 0)
+Title.TextSize = 24
+Title.TextColor3 = Color3.fromRGB(255, 0, 0)  -- Red text
 Title.TextStrokeTransparency = 0.8
 Title.TextXAlignment = Enum.TextXAlignment.Left
 
+-- Close button
 local CloseButton = Instance.new("TextButton", MainFrame)
 CloseButton.Size = UDim2.new(0, 30, 0, 30)
 CloseButton.Position = UDim2.new(1, -40, 0, 5)
@@ -49,6 +55,7 @@ CloseButton.Font = Enum.Font.SourceSansBold
 CloseButton.TextColor3 = Color3.new(1, 1, 1)
 CloseButton.TextSize = 18
 
+-- Minimize button
 local MinimizeButton = Instance.new("TextButton", MainFrame)
 MinimizeButton.Size = UDim2.new(0, 30, 0, 30)
 MinimizeButton.Position = UDim2.new(1, -80, 0, 5)
@@ -58,6 +65,7 @@ MinimizeButton.Font = Enum.Font.SourceSansBold
 MinimizeButton.TextColor3 = Color3.new(1, 1, 1)
 MinimizeButton.TextSize = 18
 
+-- Buttons frame for the script buttons
 local ButtonsFrame = Instance.new("ScrollingFrame", MainFrame)
 ButtonsFrame.Size = UDim2.new(1, -20, 1, -70)
 ButtonsFrame.Position = UDim2.new(0, 10, 0, 50)
@@ -65,46 +73,47 @@ ButtonsFrame.BackgroundTransparency = 1
 ButtonsFrame.ScrollBarThickness = 5
 ButtonsFrame.CanvasSize = UDim2.new(0, 0, 0, 600)
 
+-- Layout for the buttons in the frame
 local UIListLayout = Instance.new("UIListLayout", ButtonsFrame)
 UIListLayout.Padding = UDim.new(0, 5)
 
--- Make GUI draggable
+-- Function to make the GUI draggable
 local dragToggle = nil
 local dragSpeed = 0.1
 local dragStart = nil
 local startPos = nil
 
 local function update(input)
-	local delta = input.Position - dragStart
-	MainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    local delta = input.Position - dragStart
+    MainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
 end
 
 MainFrame.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 then
-		dragToggle = true
-		dragStart = input.Position
-		startPos = MainFrame.Position
-		input.Changed:Connect(function()
-			if dragToggle == false then
-				return
-			end
-		end)
-	end
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragToggle = true
+        dragStart = input.Position
+        startPos = MainFrame.Position
+        input.Changed:Connect(function()
+            if dragToggle == false then
+                return
+            end
+        end)
+    end
 end)
 
 MainFrame.InputEnded:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 then
-		dragToggle = false
-	end
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragToggle = false
+    end
 end)
 
 UIS.InputChanged:Connect(function(input)
-	if dragToggle then
-		update(input)
-	end
+    if dragToggle then
+        update(input)
+    end
 end)
 
--- Fade In Effect
+-- Fade-in effect for smooth appearance
 MainFrame.BackgroundTransparency = 1
 BorderFrame.BackgroundTransparency = 1
 local fadeTween = TweenService:Create(
@@ -114,7 +123,7 @@ local fadeTween = TweenService:Create(
 )
 fadeTween:Play()
 
--- List of buttons
+-- List of buttons and associated scripts
 local buttonScripts = {
     {"Chat Bypass #1", "loadstring(game:HttpGet('https://pastefy.app/CJ0E33tA/raw'))()"},
     {"Chat Bypass (OUTDATED) #2", "loadstring(game:HttpGet('https://raw.githubusercontent.com/BakaPraselol/MRCBV4LSB4KRS/main/Loader'))()"},
@@ -130,7 +139,7 @@ local buttonScripts = {
     {"Teleport Script", "loadstring(game:HttpGet('https://raw.githubusercontent.com/hyperneongaming/rbxscripts/refs/heads/main/TP%20Script'))()"},
 }
 
--- Create buttons
+-- Creating the buttons dynamically from the list
 for _, scriptData in ipairs(buttonScripts) do
     local Button = Instance.new("TextButton", ButtonsFrame)
     Button.Size = UDim2.new(1, 0, 0, 40)
@@ -147,17 +156,17 @@ for _, scriptData in ipairs(buttonScripts) do
     end)
 end
 
--- Minimize Animation
+-- Minimize button functionality
 MinimizeButton.MouseButton1Click:Connect(function()
     local minimizeTween = TweenService:Create(
         MainFrame,
         TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut),
-        {Size = UDim2.new(0, 400, 0, 50)}
+        {Size = UDim2.new(0, 600, 0, 100)}  -- Just minimize, no movement off-screen
     )
     minimizeTween:Play()
 end)
 
--- Close Animation
+-- Close button functionality
 CloseButton.MouseButton1Click:Connect(function()
     local fadeOutTween = TweenService:Create(
         MainFrame,
@@ -166,5 +175,6 @@ CloseButton.MouseButton1Click:Connect(function()
     )
     fadeOutTween:Play()
     wait(0.5)
-    ScreenGui:Destroy()
+    ScreenGui:Destroy()  -- Fully destroy the GUI after fade-out
 end)
+
