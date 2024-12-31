@@ -8,12 +8,13 @@ local GuiService = game:GetService("GuiService")
 local ScreenGui = Instance.new("ScreenGui", CoreGui)
 ScreenGui.IgnoreGuiInset = true
 
--- Main frame setup with transparent background, border, and rounded edges
+-- Main frame setup with black background, border, and rounded edges
 local MainFrame = Instance.new("Frame", ScreenGui)
 MainFrame.Size = UDim2.new(0, 600, 0, 600)
 MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
-MainFrame.BackgroundTransparency = 1  -- Fully transparent background for smoother effects
+MainFrame.BackgroundTransparency = 0  -- Black background
+MainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 MainFrame.BorderSizePixel = 0
 
 -- Outer Red Border
@@ -189,12 +190,15 @@ local buttonScripts = {
     {"Chat Chat Bypass #4", "loadstring(game:HttpGet('https://raw.githubusercontent.com/Synergy-Networks/products/main/BetterBypasser/loader.lua',true))()"},
     {"Bang Inf Yield #1", "loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()"},
     {"Bang Inf Yield (Dolphin) #2", "loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()"},
-    {"Inf Yield #3", "loadstring(game:HttpGet(('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'),true))()"},
+    {"Inf Yield #3", "loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source',true))()"},
     {"MM2 GUI", "loadstring(game:HttpGet('https://raw.githubusercontent.com/Doggo-cryto/EclipseMM2/master/Script', true))()"},
-    {"Faker IPs", "loadstring(game:HttpGet('https://raw.githubusercontent.com/BingusWR/Faker-IP-Script/main/fakerips.lua'))()"}
+    {"Faker IPs", "loadstring(game:HttpGet('https://raw.githubusercontent.com/BingusWR/FakeRobloxIPGrabber/refs/heads/main/FERobloxIpGrabberScrip'))()"},
+    {"Jack Toothpaste (r6)", "loadstring(game:HttpGet('https://pastefy.app/wa3v2Vgm/raw'))()"},
+    {"FE Bangers", "loadstring(game:HttpGet('https://gist.githubusercontent.com/benguss/282f472a00289fc4fb8ac95a5c0a6488/raw/23a402a19a7bdead6080dfe36498b68d0c3de779/Roblox%2520Bang%2520Script%2520(NSFW)'))()"},
+    {"Teleport Script", "loadstring(game:HttpGet('https://raw.githubusercontent.com/hyperneongaming/rbxscripts/refs/heads/main/TP%20Script'))()"}
 }
 
--- Dynamically create buttons
+-- Dynamically create the script buttons
 for _, script in ipairs(buttonScripts) do
     local button = Instance.new("TextButton")
     button.Size = UDim2.new(0, 200, 0, 40)
@@ -208,11 +212,6 @@ for _, script in ipairs(buttonScripts) do
     -- Rounded corners for buttons
     local UICornerButton = Instance.new("UICorner", button)
     UICornerButton.CornerRadius = UDim.new(0, 20)
-
-    -- Fade-in animation for buttons
-    button.TextTransparency = 1
-    local fadeButton = TweenService:Create(button, TweenInfo.new(2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 0})
-    fadeButton:Play()
 
     -- Button click event
     button.MouseButton1Click:Connect(function()
