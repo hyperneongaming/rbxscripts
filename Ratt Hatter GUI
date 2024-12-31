@@ -1,3 +1,4 @@
+-- Initialize Services
 local player = game.Players.LocalPlayer
 local screenGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 screenGui.Name = "RattHatterV5Gui"
@@ -5,32 +6,25 @@ screenGui.ResetOnSpawn = false
 
 -- Main Frame
 local mainFrame = Instance.new("Frame", screenGui)
-mainFrame.Size = UDim2.new(0, 500, 0, 600)
-mainFrame.Position = UDim2.new(0.5, -250, 0.5, -300)
+mainFrame.Size = UDim2.new(0, 600, 0, 700)
+mainFrame.Position = UDim2.new(0.5, -300, 0.5, -350)
 mainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 mainFrame.BorderColor3 = Color3.fromRGB(139, 0, 0) -- Dark Red Border
 mainFrame.BorderSizePixel = 3
 mainFrame.Active = true
+mainFrame.ClipsDescendants = true
 
--- Rounded Corners and Texture
+-- Rounded Corners
 local corner = Instance.new("UICorner", mainFrame)
 corner.CornerRadius = UDim.new(0, 20)
-
-local texture = Instance.new("ImageLabel", mainFrame)
-texture.Size = UDim2.new(1, 0, 1, 0)
-texture.BackgroundTransparency = 1
-texture.Image = "rbxassetid://2151741365" -- Subtle texture or pattern
-texture.ImageTransparency = 0.9
 
 -- Fade-in Effect
 mainFrame.BackgroundTransparency = 1
 mainFrame.Visible = false
-
 task.spawn(function()
     mainFrame.Visible = true
     for i = 1, 0, -0.05 do
         mainFrame.BackgroundTransparency = i
-        texture.ImageTransparency = 0.9 + (i * 0.1)
         task.wait(0.05)
     end
 end)
@@ -44,6 +38,7 @@ titleLabel.Text = "🐀 Ratt Hatter"
 titleLabel.TextColor3 = Color3.fromRGB(255, 0, 0) -- Hacker Style Red
 titleLabel.TextScaled = true
 titleLabel.Font = Enum.Font.Code -- Hacker-style code font
+titleLabel.Name = "Title"
 
 -- Buttons for Close and Minimize
 local closeButton = Instance.new("TextButton", mainFrame)
@@ -60,7 +55,6 @@ closeCorner.CornerRadius = UDim.new(0, 10)
 closeButton.MouseButton1Click:Connect(function()
     for i = 0, 1, 0.05 do
         mainFrame.BackgroundTransparency = i
-        texture.ImageTransparency = 0.9 + (i * 0.1)
         task.wait(0.05)
     end
     screenGui:Destroy()
@@ -77,34 +71,32 @@ minimizeButton.TextScaled = true
 local minimizeCorner = Instance.new("UICorner", minimizeButton)
 minimizeCorner.CornerRadius = UDim.new(0, 10)
 
--- Minimize/Expand Animation
 local minimized = false
 minimizeButton.MouseButton1Click:Connect(function()
     if not minimized then
         for i = mainFrame.Size.Y.Offset, 50, -10 do
-            mainFrame.Size = UDim2.new(0, 500, 0, i)
-            titleLabel.TextTransparency = i / 600
-            texture.ImageTransparency = 0.9 + (i / 600)
+            mainFrame.Size = UDim2.new(0, 600, 0, i)
+            titleLabel.TextTransparency = i / 700
             task.wait(0.02)
         end
         minimized = true
     else
-        for i = 50, 600, 10 do
-            mainFrame.Size = UDim2.new(0, 500, 0, i)
-            titleLabel.TextTransparency = (600 - i) / 600
-            texture.ImageTransparency = 0.9 + ((600 - i) / 600)
+        for i = 50, 700, 10 do
+            mainFrame.Size = UDim2.new(0, 600, 0, i)
+            titleLabel.TextTransparency = (700 - i) / 700
             task.wait(0.02)
         end
         minimized = false
     end
 end)
 
--- Buttons Section
+-- Scrolling Frame for Buttons
 local scrollingFrame = Instance.new("ScrollingFrame", mainFrame)
-scrollingFrame.Size = UDim2.new(1, -20, 0, 500)
+scrollingFrame.Size = UDim2.new(1, -20, 0, 600)
 scrollingFrame.Position = UDim2.new(0, 10, 0, 80)
 scrollingFrame.CanvasSize = UDim2.new(0, 0, 2, 0)
 scrollingFrame.BackgroundTransparency = 1
+scrollingFrame.Name = "ButtonContainer"
 
 -- Add buttons dynamically
 local scripts = {
