@@ -209,6 +209,7 @@ local buttonScripts = {
     {"FE Fling", "loadstring(game:HttpGet('https://paste.ee/r/NTtmf', true))()"},
     {"Mega Sus GUI", "loadstring(game:HttpGet('https://pastebin.com/raw/38Jra00x'))()"},
     {"Jack Toothpaste (r6)", "loadstring(game:HttpGet('https://pastefy.app/wa3v2Vgm/raw'))()"},
+    {"FE Troll Hub (Portal Gun + Bring Plr)", "loadstring(game:HttpGet('https://raw.githubusercontent.com/yofriendfromschool1/Sky-Hub/main/FE%20Trolling%20GUI.luau'))()"},
     {"FE Bangers", "loadstring(game:HttpGet('https://gist.githubusercontent.com/benguss/282f472a00289fc4fb8ac95a5c0a6488/raw/23a402a19a7bdead6080dfe36498b68d0c3de779/Roblox%2520Bang%2520Script%2520(NSFW)'))()"},
     {"Teleport Script", "loadstring(game:HttpGet('https://raw.githubusercontent.com/hyperneongaming/rbxscripts/refs/heads/main/TP%20Script'))()"}
 }
